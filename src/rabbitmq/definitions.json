@@ -1,0 +1,23 @@
+{
+    "users": [
+        {
+          "name": "admuser",
+          "password": "admpass",
+          "tags": "administrator"
+        }
+      ],
+
+      "vhosts":[
+          {"name":"/"}
+      ],
+
+      "permissions": [
+        {
+         "user": "admuser",
+         "vhost": "/",
+         "configure": ".*",
+         "write": ".*",
+         "read": ".*"
+        }
+       ]
+}
