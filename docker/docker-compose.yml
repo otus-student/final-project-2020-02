@@ -17,12 +17,17 @@ services:
     networks:
       - frontend-network
       - backend-network
+    depends_on:
+      - crawler_db
 
   crawler-bot:
     image: ${MYUSERNAME}/search-crawler:${BOT_VERSION}
     networks:
       - frontend-network
       - backend-network
+    depends_on:
+      - rabbitmq
+      - crawler_db
 
   rabbitmq:
     image: ${MYUSERNAME}/rabbitmq:${RABBITMQ_VERSION}
