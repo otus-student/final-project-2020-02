@@ -84,3 +84,9 @@ build_blackbox_exporter:
 
 push_blackbox_exporter:
 	docker push ${PROJECT_HUB}/blackbox-exporter:latest
+
+build_crawler:
+	cd ./src/search_engine_crawler && docker build -t ${PROJECT_HUB}/search-crawler:1.0 .
+
+push_crawler:
+	docker push ${PROJECT_HUB}/search-crawler:1.0
