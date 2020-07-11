@@ -3,3 +3,15 @@
 
 #monitoring
 monitoring/mongodb_exporter/
+
+#terraform
+*.tfstate
+*.tfstate.*.backup
+*.tfstate.backup
+*.tfvars
+.terraform/
+
+#ansible
+infra/ansible/roles/geerlingguy.docker
+infra/ansible/roles/geerlingguy.gitlab
+infra/ansible/roles/riemers.gitlab-runner

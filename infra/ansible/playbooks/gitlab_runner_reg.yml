@@ -1,0 +1,7 @@
+- name: Gitlab Runner add
+  hosts: all
+  become: true
+  vars_files:
+    - ../environments/stage/group_vars/gitlab_runner.yml
+  roles:
+    - riemers.gitlab-runner

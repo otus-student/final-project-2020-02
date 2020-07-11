@@ -42,6 +42,15 @@ grafana_firewall_rule_add:
 	--description="Allow grafana webui" \
 	--direction=INGRESS
 
+create_gcp_service_account:
+	gcloud iam service-accounts create sa-bbr-project \
+	--description="sa-for-otus-project" \
+	--display-name="sa-bbr-project"
+
+create_gcp_service_account_key:
+	gcloud iam service-accounts keys create ~/key.json \
+	--iam-account sa-bbr-project@otus-project-2020.iam.gserviceaccount.com
+
 build_rabbitmq:
 	cd ./src/rabbitmq && docker build -t ${PROJECT_HUB}/rabbitmq:1.0 .
 
