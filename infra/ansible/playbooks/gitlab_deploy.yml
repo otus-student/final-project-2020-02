@@ -1,4 +1,4 @@
-- name: Deploy Gitla CE
+- name: Deploy Gitlab CE
   hosts: all
   become: true
   roles:

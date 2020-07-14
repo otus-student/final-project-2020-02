@@ -1,15 +1,15 @@
-gitlab_runner_registration_token: 'xZemB9XgFJ8iZHRtE6M4'
-gitlab_runner_coordinator_url: 'http://35.240.52.225'
+gitlab_runner_registration_token: "{{ lookup('env','GITLAB_RUNNER_TOKEN') }}"
+gitlab_runner_coordinator_url: "http://{{ lookup('env','GITLAB_IP') }}"
 gitlab_runner_runners:
   - name: 'Docker GitLab Runner'
     executor: docker
     docker_image: 'docker:19.03.11'
     tags:
-      - dockerrunner
+      - docker
     docker_volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/cache"
     extra_configs:
       runners.docker:
         memory: 512m
-        allowed_images: ["docker:*","ruby:*"]
+        allowed_images: ["docker:*","python:*"]

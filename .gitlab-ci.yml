@@ -1,0 +1,55 @@
+image: python:3.6
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay
+
+services:
+- docker:dind
+
+build_job:
+  before_script:
+    - echo "Building docker images"
+    - cd ./src/
+  image: docker:19.03.1
+  stage: build
+  variables:
+    DOCKER_HOST: unix:///var/run/docker.sock
+  script:
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+    - docker build -t $PROJECT_HUB/rabbitmq:$CI_COMMIT_SHORT_SHA ./rabbitmq
+    - docker build -t $PROJECT_HUB/search-crawler:$CI_COMMIT_SHORT_SHA ./search_engine_crawler
+    - docker build -t $PROJECT_HUB/search-ui:$CI_COMMIT_SHORT_SHA ./search_engine_ui
+    - docker push $PROJECT_HUB/rabbitmq:$CI_COMMIT_SHORT_SHA
+    - docker push $PROJECT_HUB/search-crawler:$CI_COMMIT_SHORT_SHA
+    - docker push $PROJECT_HUB/search-ui:$CI_COMMIT_SHORT_SHA
+  tags:
+    - docker
+
+test_unit_job:
+  before_script:
+    - echo "Running tests"
+    - cd ./src/search_engine_crawler && pip install -r requirements.txt -r requirements-test.txt
+  stage: test
+  services:
+    - docker:dind
+  script:
+    - python -m unittest discover -s tests/
+    - coverage run -m unittest discover -s tests/
+    - coverage report --include crawler/crawler.py
+
+deploy_job:
+  before_script:
+    - echo "Deploying application"
+    - curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    - chmod +x /usr/local/bin/docker-compose
+  stage: deploy
+  when: manual
+  script:
+    - docker-compose -f docker/docker-compose.yml up -d
+  tags:
+    - docker

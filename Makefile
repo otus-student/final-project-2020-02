@@ -90,3 +90,19 @@ build_crawler:
 
 push_crawler:
 	docker push ${PROJECT_HUB}/search-crawler:1.0
+
+install_gitlab_stage_infra:
+	cd ./infra/terraform/stage/ && \
+	terraform apply -auto-approve
+
+install_gitlab_stage_software:
+	cd ./infra/ansible && \
+	ansible-playbook playbooks/gitlab_deploy.yml
+
+install_docker_on_hosts:
+	cd ./infra/ansible && \
+	ansible-playbook playbooks/docker_install.yml
+
+register_gitlab_runner:
+	cd ./infra/ansible && \
+	ansible-playbook playbooks/gitlab_runner_reg.yml
