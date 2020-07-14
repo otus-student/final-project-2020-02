@@ -1,0 +1,46 @@
+version: '3.3'
+
+services:
+  crawler_db:
+    image: mongo:3.2
+    volumes:
+      - crawler_db:/data/db
+    networks:
+      backend-network:
+        aliases:
+          - bbr-mongodb
+
+  crawler-ui:
+    image: ${MYUSERNAME}/search-ui:${UI_VERSION}
+    ports:
+      - ${APPLICATION_EXT_PORT}:8000/tcp
+    networks:
+      - frontend-network
+      - backend-network
+    depends_on:
+      - crawler_db
+
+  crawler-bot:
+    image: ${MYUSERNAME}/search-crawler:${BOT_VERSION}
+    networks:
+      - frontend-network
+      - backend-network
+    depends_on:
+      - rabbitmq
+      - crawler_db
+
+  rabbitmq:
+    image: ${MYUSERNAME}/rabbitmq:${RABBITMQ_VERSION}
+    ports:
+      - 15672:15672/tcp
+    networks:
+      backend-network:
+        aliases:
+          - bbr-rabbitmq
+
+volumes:
+  crawler_db:
+
+networks:
+  frontend-network:
+  backend-network:

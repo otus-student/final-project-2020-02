@@ -1,0 +1,5 @@
+- name: Deploy Gitlab CE
+  hosts: all
+  become: true
+  roles:
+    - geerlingguy.gitlab

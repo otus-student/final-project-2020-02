@@ -1,0 +1,9 @@
+---
+- src: geerlingguy.gitlab
+  version: 3.0.0
+
+- src: geerlingguy.docker
+  version: 2.8.1
+
+- src: riemers.gitlab-runner
+  version: v1.6.17
